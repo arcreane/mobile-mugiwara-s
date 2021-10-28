@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './signup.dart';
 
 Color blueColors = Color(0xff000000);
 Color blueLightColors = Color(0xff000000);
@@ -45,16 +46,23 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
                       child: Text("Se Connecter"),
                     ),
                     Spacer(),
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: "Vous n'avez encore de compte ? ",
-                            style: TextStyle(color: Colors.black)),
-                        TextSpan(
-                            text: "Inscrivez-vous",
-                            style: TextStyle(color: blueColors)),
-                      ]),
-                    )
+                    GestureDetector(
+                        onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SignUpPageFourteen(),
+                              ),
+                            ),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: "Vous n'avez encore de compte ? ",
+                                style: TextStyle(color: Colors.black)),
+                            TextSpan(
+                                text: "Inscrivez-vous",
+                                style: TextStyle(color: blueColors)),
+                          ]),
+                        )),
                   ],
                 ),
               ),
