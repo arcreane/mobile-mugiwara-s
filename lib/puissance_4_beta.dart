@@ -25,8 +25,42 @@ class titre extends StatefulWidget{
 
 class _titreState extends State<titre>{
     var mot = "test";
+    var column_1 =[false,false,false,false,false,false];
+    var column_2 =[false,false,false,false,false,false];
+    var column_3 =[false,false,false,false,false,false];
+    var column_4 =[false,false,false,false,false,false];
+    var column_5 =[false,false,false,false,false,false];
+    var column_6 =[false,false,false,false,false,false];
+    var column_7 =[false,false,false,false,false,false];
 
-    grid_column(){
+    void onColumnClic(column){
+      setState((){
+              column[0] = true;
+      });
+    }
+
+    grid_case(column_index){
+      if(column_index == false){
+        return Container( 
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ), 
+            width: 50, 
+            height: 50,
+          );
+      }else{
+        return Container( 
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              color: Colors.green
+            ), 
+            width: 50, 
+            height: 50,
+          );
+      }
+    }
+
+    grid_column(column){
         return <Widget>[
           Container(
             decoration: BoxDecoration(
@@ -40,51 +74,16 @@ class _titreState extends State<titre>{
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               child: const Text(""), 
-              onPressed: () {},
+              onPressed: () => onColumnClic(column),
             ),
           ),
-          Container( 
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
-            ), 
-            width: 50, 
-            height: 50,
-            ), 
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
-            ),
-            width: 50,
-            height: 50,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
-            ),
-            width: 50,
-            height: 50,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
-            ),
-            width: 50,
-            height: 50,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
-            ),
-            width: 50,
-            height: 50,
-          ),
+          grid_case(column[0]), 
+          grid_case(column[1]),
+          grid_case(column[2]),
+          grid_case(column[3]),
+          grid_case(column[4]),
+          grid_case(column[5])
         ];
-    }
-
-    void clicOnTest(){
-      setState((){
-        mot = "Le bouton a été cliqué";
-      });
     }
 
   @override
@@ -99,31 +98,31 @@ class _titreState extends State<titre>{
         children: <Widget>[
         Column(//Column 1
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_1)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_2)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_3)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_4)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_5)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_6)
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column()
+          children: grid_column(column_7)
         ),
       ]),
       );
