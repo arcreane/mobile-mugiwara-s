@@ -27,7 +27,22 @@ class _titreState extends State<titre>{
     var mot = "test";
 
     grid_column(){
-        return [
+        return <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ), 
+            width: 50, 
+            height: 25,
+            child:
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              child: const Text(""), 
+              onPressed: () {},
+            ),
+          ),
           Container( 
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black)
@@ -83,24 +98,31 @@ class _titreState extends State<titre>{
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
         Column(//Column 1
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: grid_column()
         ),
       ]),
