@@ -26,30 +26,40 @@ class titre extends StatefulWidget{
 class _titreState extends State<titre>{
     var mot = "test";
 
-    pairColumn(){
+    grid_column(){
         return [
           Container( 
-            color: Colors.blue, 
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ), 
             width: 50, 
             height: 50,
             ), 
           Container(
-            color: Colors.orange,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ),
             width: 50,
             height: 50,
           ),
           Container(
-            color: Colors.blue,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ),
             width: 50,
             height: 50,
           ),
           Container(
-            color: Colors.orange,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ),
             width: 50,
             height: 50,
           ),
           Container(
-            color: Colors.blue,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ),
             width: 50,
             height: 50,
           ),
@@ -72,17 +82,26 @@ class _titreState extends State<titre>{
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Column(//Column 1
-          children: pairColumn()
+        Column(//Column 1
+          children: grid_column()
         ),
         Column(
-          children: [
-            Container(
-              color: Colors.orange,
-              width: 50,
-              height: 50,
-            ),
-          ],
+          children: grid_column()
+        ),
+        Column(
+          children: grid_column()
+        ),
+        Column(
+          children: grid_column()
+        ),
+        Column(
+          children: grid_column()
+        ),
+        Column(
+          children: grid_column()
+        ),
+        Column(
+          children: grid_column()
         ),
       ]),
       );
