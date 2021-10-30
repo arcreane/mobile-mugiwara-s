@@ -35,7 +35,12 @@ class _titreState extends State<titre>{
 
     void onColumnClic(column){
       setState((){
-              column[0] = true;
+        for(int i = 5; i >= 0; i--){
+          if(column[i] == false){
+            column[i] = true;
+            break;
+          }
+        }
       });
     }
 
