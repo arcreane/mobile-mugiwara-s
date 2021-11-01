@@ -25,15 +25,49 @@ class titre extends StatefulWidget{
 
 class _titreState extends State<titre>{
     var mot = "test";
-    var column_1 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_2 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_3 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_4 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_5 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_6 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
-    var column_7 =[[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]];
+    var allColumn =[
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      [[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor],[false, MaterialColor]],
+      ];
     var player = "player_1";
     MaterialColor player_color = Colors.green;
+
+    verticalUpVerification(column, x, color){
+      int vic_point = 1;
+      for(int i = 1; i < 4; i++){
+        print(vic_point);
+        if(column[x + i][0] == true && column[x + i][1] == color){
+          vic_point += 1;
+        }else{
+          return false;
+        }
+      }
+      if(vic_point >= 4){
+        return true;
+      }
+    }
+
+    victoryVerification(column){
+      for(int x = 0; x <= 6; x++){
+        for(int y = 0; y <= 5; y++){
+          if(column[x][y][0] == true){
+            if(verticalUpVerification(column[x], y, column[x][y][1]) == true){
+              if(column[x][y][1] == Colors.orange){
+                return [true, "Victoire du joueur orange"];
+              }else{
+                return [true, "Victoire du joueur vert"];
+              }
+            }
+          }
+        }
+      }
+      return [false, "aucun gagnant"];
+    }
 
     void onColumnClic(column){
       setState((){
@@ -50,6 +84,10 @@ class _titreState extends State<titre>{
             column[i][1] = player_color;
             break;
           }
+        }
+        var victory = victoryVerification(allColumn);
+        if(victory[0] == true){
+          print(victory[1]);
         }
       });
     }
@@ -89,7 +127,10 @@ class _titreState extends State<titre>{
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               child: const Text(""), 
-              onPressed: () => onColumnClic(column),
+              onPressed: () {
+                onColumnClic(column);
+                print("boutton appuyé");
+              }
             ),
           ),
           grid_case(column[5][0],column[5][1]), 
@@ -113,31 +154,31 @@ class _titreState extends State<titre>{
         children: <Widget>[
         Column(//Column 1
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_1)
+          children: grid_column(allColumn[0])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_2)
+          children: grid_column(allColumn[1])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_3)
+          children: grid_column(allColumn[2])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_4)
+          children: grid_column(allColumn[3])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_5)
+          children: grid_column(allColumn[4])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_6)
+          children: grid_column(allColumn[5])
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: grid_column(column_7)
+          children: grid_column(allColumn[6])
         ),
       ]),
       );
