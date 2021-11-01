@@ -37,11 +37,60 @@ class _titreState extends State<titre>{
     var player = "player_1";
     MaterialColor player_color = Colors.green;
 
-    verticalUpVerification(column, x, color){
+    verticalUpVerification(column, y, color){
       int vic_point = 1;
       for(int i = 1; i < 4; i++){
-        print(vic_point);
-        if(column[x + i][0] == true && column[x + i][1] == color){
+        if(i + y > 5){
+          return false;
+        }else if(column[y + i][0] == true && column[y + i][1] == color){
+          vic_point += 1;
+        }else{
+          return false;
+        }
+      }
+      if(vic_point >= 4){
+        return true;
+      }
+    }
+
+    verticalRawVerification(column, x, y, color){
+      int vic_point = 1;
+      for(int i = 1; i < 4; i++){
+        if(i + x > 6){
+          return false;
+        }else if(column[x + i][y][0] == true && column[x + i][y][1] == color){
+          vic_point += 1;
+        }else{
+          return false;
+        }
+      }
+      if(vic_point >= 4){
+        return true;
+      }
+    }
+
+    verticalUpLeftVerification(column, x, y, color){
+      int vic_point = 1;
+      for(int i = 1; i < 4; i++){
+        if(i + x > 6 || i + y > 5){
+          return false;
+        }else if(column[x + i][y + i][0] == true && column[x + i][y + i][1] == color){
+          vic_point += 1;
+        }else{
+          return false;
+        }
+      }
+      if(vic_point >= 4){
+        return true;
+      }
+    }
+    
+    verticalUpRightVerification(column, x, y, color){
+      int vic_point = 1;
+      for(int i = 1; i < 4; i++){
+        if(i + x > 6 || i + y > 5 || x - i < 0){
+          return false;
+        }else if(column[x - i][y + i][0] == true && column[x - i][y + i][1] == color){
           vic_point += 1;
         }else{
           return false;
@@ -56,7 +105,7 @@ class _titreState extends State<titre>{
       for(int x = 0; x <= 6; x++){
         for(int y = 0; y <= 5; y++){
           if(column[x][y][0] == true){
-            if(verticalUpVerification(column[x], y, column[x][y][1]) == true){
+            if(verticalUpVerification(column[x], y, column[x][y][1]) == true || verticalRawVerification(column, x, y, column[x][y][1]) == true || verticalUpLeftVerification(column, x, y, column[x][y][1]) == true || verticalUpRightVerification(column, x, y, column[x][y][1]) == true){
               if(column[x][y][1] == Colors.orange){
                 return [true, "Victoire du joueur orange"];
               }else{
