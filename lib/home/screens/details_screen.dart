@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mugi/home/models/AnimeTMDB.dart';
+import 'package:mugi/home/models/Content.dart';
+import 'package:mugi/main.dart';
 import '../models/Anime.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class DetailsScreen extends StatefulWidget {
-  final Anime? anime;
+  final AnimeTMDB? anime;
 
   DetailsScreen({Key? key, this.anime}) : super(key: key);
 
@@ -12,6 +18,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final GlobalState ctrl = Get.find();
+
   Text _buildRatingStars(int rating) {
     String stars = '';
     for (int i = 0; i < rating; i++) {
@@ -19,6 +27,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
     stars.trim();
     return Text(stars);
+  }
+
+  // Future<bool> AnimeExistInWatchList() async {
+  //   if(ctrl.user.watch_list.firstWhere((element) => ))
+  // }
+
+  Future<void> AddtoMyWatchlist(
+      String name, String imageUrl, int tmdb_id) async {
+    var client = http.Client();
+    try {
+      Content newContent =
+          Content(id: 1, imageUrl: imageUrl, name: name, tmdb_id: tmdb_id);
+      var url = Uri.parse('http://127.0.0.1:8000/api/watchlist/');
+      var response = await client.post(url, body: {
+        'userId': ctrl.user.id.toString(),
+        'imageUrl': imageUrl,
+        'tmdbId': tmdb_id.toString(),
+        'name': name
+      });
+      ctrl.AddContentToWatchList(newContent);
+    } catch (err) {
+      print(err);
+      client.close();
+    }
   }
 
   @override
@@ -41,11 +73,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ],
                 ),
                 child: Hero(
-                  tag: widget.anime!.imageUrl!,
+                  tag: widget.anime!.name!,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(30.0),
                     child: Image(
-                      image: NetworkImage(widget.anime!.imageUrl!),
+                      image: NetworkImage(widget.anime!.backdrop_path!),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -88,7 +120,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      widget.anime!.nom!,
+                      widget.anime!.name!,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 35.0,
@@ -104,13 +136,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           color: Colors.white70,
                         ),
                         SizedBox(width: 5.0),
-                        Text(
-                          widget.anime!.genre!,
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 20.0,
-                          ),
-                        ),
+                        // Text(
+                        //   widget.anime!.genre!,
+                        //   style: TextStyle(
+                        //     color: Colors.white70,
+                        //     fontSize: 20.0,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
@@ -129,7 +161,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
           Expanded(
             child: Container(
-                margin: EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
+                margin: EdgeInsets.fromLTRB(1, 1, 1, 1),
                 height: 170.0,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -137,19 +169,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
-                    child: Row(children: <Widget>[
+                    padding: EdgeInsets.fromLTRB(1, 1, 1, 1),
+                    child: Column(children: <Widget>[
                       Text(
-                        'Rating : ${widget.anime!.rating!}',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
+                        'Rating : ${widget.anime!.vote_average!}',
+                        style: TextStyle(color: Colors.grey, fontSize: 22),
                       ),
-                      Text(
-                        widget.anime!.description!,
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: Text(
+                            widget.anime!.overview!,
+                            style: TextStyle(color: Colors.grey, fontSize: 22),
+                          )),
+                      Spacer(),
+                      RaisedButton(
+                        padding: const EdgeInsets.all(32.0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(120.0)),
+                        color: Colors.orange,
+                        textColor: Colors.white,
+                        onPressed: () => AddtoMyWatchlist(widget.anime!.name!,
+                            widget.anime!.poster_path!, widget.anime!.id!),
+                        child: Text("ajouter"),
                       ),
                     ]))),
           ),

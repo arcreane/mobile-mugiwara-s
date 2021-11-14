@@ -1,15 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mugi/home/models/User.dart';
+import 'package:mugi/home/ui/main.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
+import 'package:mugi/main.dart';
 
 Color blueColors = Color(0xff000000);
 Color blueLightColors = Color(0xff000000);
 
-class SignUpPageFourteen extends StatefulWidget {
-  static final String path = "lib/src/pages/signup/signup14.dart";
+class SignUpPage extends StatefulWidget {
   @override
-  _signupPageFourteenState createState() => _signupPageFourteenState();
+  _signupPageState createState() => _signupPageState();
 }
 
-class _signupPageFourteenState extends State<SignUpPageFourteen> {
+class _signupPageState extends State<SignUpPage> {
+  String email = "";
+  String mdp = "";
+  String nom = "";
+  String prenom = "";
+
+  void inscription(BuildContext context) async {
+    if (email != "" && mdp != "" && nom != "" && prenom != "") {
+      var client = http.Client();
+      try {
+        var url = Uri.parse('http://127.0.0.1:8000/api/create-user/');
+        var response = await client.post(url,
+            body: {'mail': email, 'mdp': mdp, 'prenom': prenom, 'nom': nom});
+        var decodedResponse =
+            convert.jsonDecode(response.body) as Map<String, dynamic>;
+        print(decodedResponse);
+        if (response.statusCode == 201) {
+          User u = User.fromJson(decodedResponse);
+          final GlobalState ctrl = Get.find();
+          ctrl.setUser(u);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomePage(),
+            ),
+          );
+        }
+        ;
+      } catch (err) {
+        print(err);
+        client.close();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +66,22 @@ class _signupPageFourteenState extends State<SignUpPageFourteen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    _textInput(hint: "Entrez votre nom"),
-                    _textInput(hint: "Entrez votre prénom"),
-                    _textInput(hint: "Entrez votre Email", icon: Icons.email),
-                    _textInput(hint: "Mot de passe", icon: Icons.vpn_key),
+                    _textInput(
+                        hint: "Entrez votre nom",
+                        icon: Icons.account_box,
+                        onChanged: (text) => nom = text),
+                    _textInput(
+                        hint: "Entrez votre prénom",
+                        icon: Icons.account_box,
+                        onChanged: (text) => prenom = text),
+                    _textInput(
+                        hint: "Entrez votre Email",
+                        icon: Icons.email,
+                        onChanged: (text) => email = text),
+                    _textInput(
+                        hint: "Mot de passe",
+                        icon: Icons.vpn_key,
+                        onChanged: (text) => mdp = text),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                     ),
@@ -39,7 +92,7 @@ class _signupPageFourteenState extends State<SignUpPageFourteen> {
                           borderRadius: BorderRadius.circular(120.0)),
                       color: Colors.orange,
                       textColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () => inscription(context),
                       child: Text("S'inscrire"),
                     ),
                   ],
@@ -52,7 +105,7 @@ class _signupPageFourteenState extends State<SignUpPageFourteen> {
     );
   }
 
-  Widget _textInput({controller, hint, icon}) {
+  Widget _textInput({controller, hint, icon, onChanged}) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -67,6 +120,7 @@ class _signupPageFourteenState extends State<SignUpPageFourteen> {
           hintText: hint,
           prefixIcon: Icon(icon),
         ),
+        onChanged: onChanged,
       ),
     );
   }
