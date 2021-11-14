@@ -1,16 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:mugi/home/models/User.dart';
+import 'package:mugi/home/ui/main.dart';
+import 'package:mugi/main.dart';
 import './signup.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
+import 'package:get/get.dart';
 
 Color blueColors = Color(0xff000000);
 Color blueLightColors = Color(0xff000000);
 
-class LoginPageFourteen extends StatefulWidget {
-  static final String path = "lib/src/pages/login/login14.dart";
+class LoginPage extends StatefulWidget {
   @override
-  _LoginPageFourteenState createState() => _LoginPageFourteenState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageFourteenState extends State<LoginPageFourteen> {
+class _LoginPageState extends State<LoginPage> {
+  String email = "";
+  String mdp = "";
+
+  void seConnecter(BuildContext context) async {
+    if (email != "" && mdp != "") {
+      var client = http.Client();
+      try {
+        var url = Uri.parse('http://127.0.0.1:8000/api/login/');
+        print(url);
+        var response =
+            await client.post(url, body: {'mail': email, 'mdp': mdp});
+        var decodedResponse = convert.jsonDecode(response.body) as Map;
+        if (response.statusCode == 200) {
+          User u = User.fromJson(decodedResponse['user']);
+          final GlobalState ctrl = Get.find();
+          ctrl.setUser(u);
+          print(ctrl);
+          print(u);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomePage(),
+            ),
+          );
+        }
+        ;
+      } catch (err) {
+        print(err);
+        client.close();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +66,14 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    _textInput(hint: "Entrez votre Email", icon: Icons.email),
-                    _textInput(hint: "Mot de passe", icon: Icons.vpn_key),
+                    _textInput(
+                        hint: "Entrez votre Email",
+                        icon: Icons.email,
+                        onChanged: (text) => email = text),
+                    _textInput(
+                        hint: "Mot de passe",
+                        icon: Icons.vpn_key,
+                        onChanged: (text) => mdp = text),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       alignment: Alignment.centerRight,
@@ -42,7 +88,7 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
                           borderRadius: BorderRadius.circular(120.0)),
                       color: Colors.orange,
                       textColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () => seConnecter(context),
                       child: Text("Se Connecter"),
                     ),
                     Spacer(),
@@ -50,7 +96,7 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
                         onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => SignUpPageFourteen(),
+                                builder: (_) => SignUpPage(),
                               ),
                             ),
                         child: RichText(
@@ -73,7 +119,7 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
     );
   }
 
-  Widget _textInput({controller, hint, icon}) {
+  Widget _textInput({controller, hint, icon, onChanged}) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -88,6 +134,7 @@ class _LoginPageFourteenState extends State<LoginPageFourteen> {
           hintText: hint,
           prefixIcon: Icon(icon),
         ),
+        onChanged: onChanged,
       ),
     );
   }

@@ -1,12 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mugi/home/models/AnimeTMDB.dart';
+import 'package:mugi/home/models/Content.dart';
+import 'package:mugi/main.dart';
 import '../data/data.dart';
 import '../models/Anime.dart';
 import '../screens/details_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
-class AnimePage extends StatelessWidget {
-  final String? title;
+class AnimePage extends StatefulWidget {
+  final String title;
+  final String genre;
 
-  AnimePage({this.title});
+  AnimePage({required this.title, required this.genre});
+
+  @override
+  _AnimePageState createState() => _AnimePageState(title, genre);
+}
+
+class _AnimePageState extends State<AnimePage> {
+  List<AnimeTMDB> lesAnimes = [];
+  String title;
+  String genre;
+
+  _AnimePageState(this.title, this.genre);
+
+  Future<void> getAnimes() async {
+    var client = http.Client();
+    try {
+      var url = Uri();
+
+      if (genre == "top") {
+        url = Uri.parse(
+            'https://api.themoviedb.org/3/discover/tv?api_key=61d165f130785bdd48afecc701be6a70&with_genres=16&vote_average.gte=8&language=fr&page=1');
+      } else {
+        var genre_id =
+            lesGenres.firstWhere((element) => element['name'] == genre)['id'];
+        url = Uri.parse(
+            'https://api.themoviedb.org/3/discover/tv?api_key=61d165f130785bdd48afecc701be6a70&with_genres=16,' +
+                '$genre_id' +
+                '&language=fr&page=1');
+      }
+      var response = await client.get(url);
+      var decodedResponse = convert.jsonDecode(response.body) as Map;
+      final fetchedAnimes = (decodedResponse['results'] as List)
+          .map((anime) => AnimeTMDB.fromJson(anime))
+          .toList();
+      print(fetchedAnimes);
+
+      setState(() {
+        lesAnimes = fetchedAnimes;
+      });
+    } catch (err) {
+      print(err);
+      client.close();
+    }
+  }
+
+  @override
+  void initState() {
+    getAnimes();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +73,7 @@ class AnimePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '${title}',
+                '$title',
                 style: TextStyle(
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold,
@@ -44,9 +99,9 @@ class AnimePage extends StatelessWidget {
           height: 300.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: animes.length,
+            itemCount: lesAnimes.length,
             itemBuilder: (BuildContext context, int index) {
-              Anime anime = animes[index];
+              AnimeTMDB anime = lesAnimes[index];
               return GestureDetector(
                   onTap: () => Navigator.push(
                         context,
@@ -77,7 +132,7 @@ class AnimePage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Text(
-                                    anime.nom!,
+                                    anime.name!,
                                     style: TextStyle(
                                       fontSize: 22.0,
                                       fontWeight: FontWeight.w600,
@@ -86,7 +141,7 @@ class AnimePage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 2.0),
                                   Text(
-                                    'rating: ${anime.rating}',
+                                    'rating: ${anime.vote_average}',
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w600,
@@ -114,7 +169,7 @@ class AnimePage extends StatelessWidget {
                             child: Image(
                               height: 180.0,
                               width: 220.0,
-                              image: NetworkImage(anime.imageUrl!),
+                              image: NetworkImage(anime.poster_path!),
                               fit: BoxFit.cover,
                             ),
                           ),
