@@ -69,11 +69,15 @@ class _LoginPageState extends State<LoginPage> {
                     _textInput(
                         hint: "Entrez votre Email",
                         icon: Icons.email,
+                        obscureText : false,
                         onChanged: (text) => email = text),
+
                     _textInput(
                         hint: "Mot de passe",
+                        obscureText: true,
                         icon: Icons.vpn_key,
                         onChanged: (text) => mdp = text),
+
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       alignment: Alignment.centerRight,
@@ -119,16 +123,18 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _textInput({controller, hint, icon, onChanged}) {
+  Widget _textInput({controller, hint, icon, onChanged, obscureText}) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
+
         borderRadius: BorderRadius.all(Radius.circular(20)),
         color: Colors.white,
       ),
       padding: EdgeInsets.only(left: 10),
       child: TextFormField(
         controller: controller,
+        obscureText : obscureText,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
