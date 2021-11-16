@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mugi/home/models/AnimeTMDB.dart';
 
-class Topmovies extends StatelessWidget {
-  final List topmovies;
+class search_anime_result extends StatelessWidget {
+  final List<AnimeTMDB> list_anime;
 
-  const Topmovies({Key? key, required this.topmovies}): super(key: key);
+  const search_anime_result({Key? key, required this.list_anime}): super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -14,9 +15,13 @@ class Topmovies extends StatelessWidget {
           Text('Trending Movies'),
           Container(
             height: 500,
-            child: ListView.builder(itemCount: topmovies.length,
+            child: ListView.builder(itemCount: list_anime.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index){
+                AnimeTMDB anime = list_anime[index];
+                if(anime.poster_path == ""){
+                  return Container(width: 0,height: 0,);
+                }
                 return InkWell(
                   onTap: (){
                   },
@@ -30,7 +35,7 @@ class Topmovies extends StatelessWidget {
                               height:200,
                               width: 100,
                               decoration: BoxDecoration(image: DecorationImage(
-                                image: NetworkImage('http://image.tmdb.org/t/p/w500'+topmovies[index]["poster_path"]),
+                                image: NetworkImage(anime.poster_path!),
                                 )
                               ),
                             ),
@@ -38,7 +43,7 @@ class Topmovies extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Container(
-                                    child: Text(topmovies[index]['title']),
+                                    child: Text(anime.name!),
                                     margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
                                     width: 250,
                                   ),
@@ -46,7 +51,7 @@ class Topmovies extends StatelessWidget {
                                     margin: EdgeInsets.fromLTRB(10, 0, 0, 50),
                                     height:50,
                                     width: 250,
-                                    child: Text(topmovies[index]['overview'])
+                                    child: Text(anime.overview!)
                                   )
                                 ],
                               )

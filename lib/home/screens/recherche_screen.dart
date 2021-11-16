@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_const_constructor
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:mugi/home/models/AnimeTMDB.dart';
+import 'package:mugi/home/models/Content.dart';
+import 'package:mugi/main.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 import '../widgets/recherche.dart';
 
 void main() => runApp(MyApp());
@@ -27,48 +32,33 @@ class _titreState extends State<titre>{
 
   @override
 
-  List top_movies = [];
-  List search_movies = [];
-  final String api_key = 'ae5ba588523ae802dd1c32820424ac1d';
-  final access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTViYTU4ODUyM2FlODAyZGQxYzMyODIwNDI0YWMxZCIsInN1YiI6IjYxODg0YjljZDM4OGFlMDA4YTE2Mzk3MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8YM5r5gMP5kwSSxM1rO9tBMTdVu9nSk9JcEr2bfLHlY';
+  List<AnimeTMDB> search_anime = [];
+  var result_page;
+  TextEditingController recherche = TextEditingController();
 
   @override
   void initState(){
-    loadTopMovies();
+    find_anime("");
     super.initState();
   }
 
-  loadTopMovies()async{
-    TMDB tmdbwithcustomlogs = TMDB(ApiKeys(api_key, access_token),
-    logConfig: ConfigLogger(
-      showErrorLogs: true,
-      showLogs: true
-    ));
+  find_anime(String word)async{
     // for(int i = 1; i <= 3; i++){
     //   Map loaded_top_movies = await tmdbwithcustomlogs.v3.movies.getTopRated(page:i);
     // }
-    Map loaded_top_movies = await tmdbwithcustomlogs.v3.movies.getTopRated(page:1);
-    // Map loaded_search_movies = await tmdbwithcustomlogs.v3.search.queryKeywords("naruto");
-    Map loaded_search_movies = await tmdbwithcustomlogs.v3.movies.getLists(279734);
+    // Map loaded_top_movies = await tmdbwithcustomlogs.v3.movies.getTopRated(page:1);
+    var client = http.Client();
+    var url = Uri.parse('https://api.themoviedb.org/3/search/tv?api_key=61d165f130785bdd48afecc701be6a70&with_genres=16&language=fr&query='+word+'&page=1');
+    var response = await client.get(url);
+    var decodedResponse = convert.jsonDecode(response.body) as Map;
+    final fetchedAnimes = (decodedResponse['results'] as List).map((anime) => AnimeTMDB.fromJson(anime)).toList();
 
     setState(() {
-      top_movies = loaded_top_movies["results"];
-      search_movies = loaded_search_movies["results"];
+      search_anime = fetchedAnimes;
+      result_page = search_anime_result(list_anime: search_anime);
     });
-    print(search_movies);
-  }
-
-  getTitle(Map listfilm){
-    int i = 0;
-    List custom_listfilm = [];
-    listfilm.forEach((key, value){
-      if(key == "results"){
-        for(var film in listfilm[key]){
-          custom_listfilm.add(film["title"]);
-        }
-      }
-    });
-    return custom_listfilm;
+    print(search_anime);
+    // print(anime_detail);
   }
 // --------------------------------------------------------------------------------------------------------------------------
 
@@ -80,14 +70,33 @@ class _titreState extends State<titre>{
       ),
       body: Column(
         children: [
-          Container(
-            child:TextField(
-              decoration: InputDecoration(
-                hintText: "Recherche"
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  width: 350,
+                  child:TextField(
+                  controller: recherche,
+                  decoration: InputDecoration(
+                    hintText: "Recherche"
+                    ),
+                  )
+                ),
               ),
-            )
+              Container(
+                width:10,
+                child: ElevatedButton(
+                  onPressed: () {
+                    print(recherche.text);
+                    find_anime(recherche.text);
+                  }, child: null,
+                )
+              )
+            ]
           ),
-          Topmovies(topmovies: top_movies)
+          Container(
+            child: result_page
+          )
         ]
       )
     );
