@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mugi/home/models/User.dart';
-import 'package:mugi/home/ui/main.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
+import './home/screens/home_screen.dart';
 import 'package:mugi/main.dart';
 
 Color blueColors = Color(0xff000000);
@@ -39,7 +39,7 @@ class _signupPageState extends State<SignUpPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => HomePage(),
+              builder: (_) => HomeScreen(),
             ),
           );
         }

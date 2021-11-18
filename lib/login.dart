@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mugi/home/models/User.dart';
-import 'package:mugi/home/ui/main.dart';
+import './home/screens/home_screen.dart';
 import 'package:mugi/main.dart';
 import './signup.dart';
 import 'package:http/http.dart' as http;
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => HomePage(),
+              builder: (_) => HomeScreen(),
             ),
           );
         }
@@ -69,15 +69,13 @@ class _LoginPageState extends State<LoginPage> {
                     _textInput(
                         hint: "Entrez votre Email",
                         icon: Icons.email,
-                        obscureText : false,
+                        obscureText: false,
                         onChanged: (text) => email = text),
-
                     _textInput(
                         hint: "Mot de passe",
                         obscureText: true,
                         icon: Icons.vpn_key,
                         onChanged: (text) => mdp = text),
-
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       alignment: Alignment.centerRight,
@@ -127,14 +125,13 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-
         borderRadius: BorderRadius.all(Radius.circular(20)),
         color: Colors.white,
       ),
       padding: EdgeInsets.only(left: 10),
       child: TextFormField(
         controller: controller,
-        obscureText : obscureText,
+        obscureText: obscureText,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,

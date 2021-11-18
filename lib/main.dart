@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:mugi/home/models/Content.dart';
 import 'package:mugi/home/models/User.dart';
+import 'package:mugi/home/screens/Profil_user.dart';
 import 'package:mugi/home/screens/home_screen.dart';
 import './login.dart';
 import './signup.dart';
-import './home/ui/main.dart';
 
 import 'package:get/get.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  static final String title = 'Main APP';
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(GlobalState());
 
     return MaterialApp(
-      title: 'JustAnimes',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.yellow,
-          foregroundColor: Colors.white,
-        ),
+        primaryColor: Colors.white,
       ),
-      home: HomePage(),
+      title: title,
+      home: LoginPage(),
     );
   }
 }
