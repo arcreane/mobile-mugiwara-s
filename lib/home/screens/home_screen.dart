@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, deprecated_member_use, prefer_const_constructors, dead_code
+
 import 'package:flutter/material.dart';
 import 'package:mugi/home/screens/watch_list.dart';
 import '../widgets/anime.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'Profil_user.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,13 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   int _currentTab = 0;
-  final List _children = [HomeTabWidget(), WatchList()];
-  List<IconData> _icons = [
-    FontAwesomeIcons.plane,
-    FontAwesomeIcons.bed,
-    FontAwesomeIcons.walking,
-    FontAwesomeIcons.biking,
-  ];
+  final List _children = [HomeTabWidget(), WatchList(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -30,25 +27,25 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentTab = value;
           });
         },
-        items: [
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.search,
+              Icons.home,
               size: 30.0,
             ),
-            title: SizedBox.shrink(),
+            label: ('Accueil'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.watch_later,
-              size: 30.0,
-            ),
-            title: SizedBox.shrink(),
-          ),
+              icon: Icon(
+                Icons.watch_later,
+                size: 30.0,
+              ),
+              // ignore: deprecated_member_use
+              label: ('WatchList')),
+          // ignore: prefer_const_constructors
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.user, size: 30.0),
-            title: SizedBox.shrink(),
-          )
+              icon: Icon(Icons.settings_applications, size: 30.0),
+              label: ('Mon Profil')),
         ],
       ),
     );
