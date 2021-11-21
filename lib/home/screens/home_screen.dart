@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, deprecated_member_use, prefer_const_constructors, dead_code
-
+import 'package:mugi/home/screens/recherche_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mugi/home/screens/watch_list.dart';
 import '../widgets/anime.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   int _currentTab = 0;
-  final List _children = [HomeTabWidget(), WatchList(), ProfilePage()];
+  final List _children = [Recherche(), HomeTabWidget(), WatchList(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +27,19 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentTab = value;
           });
         },
-        items: <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+              size: 30.0
+            ),
+            label: ('Recherche'),
+          ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
+              color: Colors.black,
               size: 30.0,
             ),
             label: ('Accueil'),
@@ -38,14 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.watch_later,
+                color: Colors.black,
                 size: 30.0,
               ),
               // ignore: deprecated_member_use
-              label: ('WatchList')),
+              label: ('WatchList')
+          ),
           // ignore: prefer_const_constructors
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings_applications, size: 30.0),
-              label: ('Mon Profil')),
+              icon: Icon(
+                Icons.settings_applications,
+                color: Colors.black,
+                size: 30.0
+              ),
+              label: ('Mon P rofil')),
         ],
       ),
     );

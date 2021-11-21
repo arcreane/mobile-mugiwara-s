@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     if (email != "" && mdp != "") {
       var client = http.Client();
       try {
-        var url = Uri.parse('http://127.0.0.1:8000/api/login/');
+        var url = Uri.parse('http://10.0.2.2:8000/api/login/');
         print(url);
         var response =
             await client.post(url, body: {'mail': email, 'mdp': mdp});

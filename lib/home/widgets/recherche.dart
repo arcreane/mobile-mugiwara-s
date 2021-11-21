@@ -8,13 +8,15 @@ class search_anime_result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    int nb_resultat = list_anime.length;
+    double container_size = MediaQuery.of(context).size.height - 230;
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
-          Text('Trending Movies'),
+          Text('Nombre de resultat : $nb_resultat'),
           Container(
-            height: 500,
+            height: container_size,
             child: ListView.builder(itemCount: list_anime.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index){
