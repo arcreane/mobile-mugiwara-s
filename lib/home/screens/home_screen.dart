@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   int _currentTab = 0;
-  final List _children = [Recherche(), HomeTabWidget(), WatchList(), ProfilePage()];
+  final List _children = [HomeTabWidget(),Recherche(), WatchList(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
           items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.search,
-              color: Colors.black,
-              size: 30.0
-            ),
-            label: ('Recherche'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.home,
               color: Colors.black,
               size: 30.0,
             ),
             label: ('Accueil'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+              size: 30.0
+            ),
+            label: ('Recherche'),
           ),
           BottomNavigationBarItem(
               icon: Icon(
