@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructor
-import 'package:theme_provider/theme_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mugi/home/models/AnimeTMDB.dart';
 import 'package:http/http.dart' as http;
@@ -12,23 +10,9 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    return ThemeProvider(
-      child: Builder(
-        builder: (context) => MaterialApp(
-          title: "Recherche",
-          theme: ThemeData(
-            primarySwatch: Colors.grey,
-            primaryColor: Colors.black,
-            brightness: Brightness.dark,
-            backgroundColor: const Color(0xFF212121),
-            accentColor: Colors.white,
-            accentIconTheme: IconThemeData(color: Colors.black),
-            dividerColor: Colors.black12
-          ),
-          themeMode: ThemeMode.system,
-          home: Recherche()
-          ),
-      )
+    return MaterialApp(
+      title: "Recherche",
+      home: Recherche()
     );
   }
 }
